@@ -1,6 +1,7 @@
 var Api = "6ac18e94972e102fa3ca3a7dc60371b5";
 var userInput = document.getElementById("userForm");
 //template literals
+renderLocal();
 
 function getCurrent(cityName) {
   fetch(
@@ -17,8 +18,8 @@ function getCurrent(cityName) {
       if (previous.indexOf(cityName) === -1) {
         previous.push(cityName);
         localStorage.setItem("weatherUser", JSON.stringify(previous));
+        renderLocal();
       }
-
       getOneCall(cityName, lat, lon);
     });
 }
@@ -33,6 +34,15 @@ function getOneCall(cityName, lat, lon) {
     .then(function (data) {
       console.log(data);
     });
+}
+
+function renderLocal() {
+  var previous = JSON.parse(localStorage.getItem("weatherUser")) || [];
+  let element = "Previous Searches";
+  for (let i = 0; i < previous.length; i++) {
+    element += `<li><button> ${previous[i]}</button></li>`; // element = element + previous[i]
+  }
+  document.getElementById("side").innerHTML = element;
 }
 
 userInput.addEventListener("submit", function (event) {
